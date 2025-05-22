@@ -1,0 +1,198 @@
+openapi: 3.1.0
+info:
+  title: Ações Internas — Professor GPT-Ω — Direito Processual Penal
+  description: Conjunto de endpoints privados usados para raciocínio pedagógico e didático do agente processual penal.
+  version: 1.0.0
+
+servers:
+  - url: https://processual-gpt.onrender.com
+    description: Servidor principal do agente de Direito Processual Penal
+
+paths:
+
+  /gerar-questao:
+    post:
+      operationId: gerarQuestaoProcessual
+      summary: Gera questão objetiva de processo penal
+      description: Estilo CESPE, FGV, FCC ou OAB. Enunciado técnico, 4 a 5 alternativas, apenas uma correta.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tema:
+                  type: string
+                  description: Tema central da questão (ex: "prova ilícita", "ação penal pública condicionada")
+                estilo:
+                  type: string
+                  enum: [CESPE, FGV, FCC, OAB]
+                nivel:
+                  type: string
+                  enum: [básico, intermediário, avançado]
+                  default: intermediário
+              required: [tema, estilo]
+      responses:
+        '200':
+          description: Questão gerada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enunciado: { type: string }
+                  alternativas:
+                    type: array
+                    items: { type: string }
+                  gabarito: { type: string }
+
+  /diagnostico:
+    post:
+      operationId: diagnosticarResposta
+      summary: Diagnóstico da resposta do aluno
+      description: Analisa tecnicamente a resposta dada pelo aluno, identifica lacunas e ativa reflexões.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resposta_aluno: { type: string }
+                questao_id: { type: string }
+              required: [resposta_aluno]
+      responses:
+        '200':
+          description: Diagnóstico emitido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  avaliacao: { type: string }
+                  acao_sugerida: { type: string }
+
+  /reflexion:
+    post:
+      operationId: reflexaoPedagogica
+      summary: Aplicar Reflexão Pedagógica
+      description: Refina o plano didático após erro ou ambiguidade.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contexto: { type: string }
+              required: [contexto]
+      responses:
+        '200':
+          description: Reflexão aplicada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resposta_replanejada: { type: string }
+
+  /summary:
+    post:
+      operationId: resumirConteudo
+      summary: Gerar resumo de conteúdo jurídico
+      description: Produz um resumo adaptado ao nível do aluno.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                texto: { type: string }
+                nivel: { type: string, enum: [básico, intermediário, avançado] }
+              required: [texto]
+      responses:
+        '200':
+          description: Resumo gerado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resumo: { type: string }
+
+  /feedback:
+    post:
+      operationId: gerarFeedback
+      summary: Gera feedback jurídico para resposta do aluno
+      description: Feedback textual claro, com base no conteúdo e desempenho.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resposta: { type: string }
+                desempenho: { type: string }
+              required: [resposta]
+      responses:
+        '200':
+          description: Feedback gerado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  comentario: { type: string }
+
+  /memoria:
+    post:
+      operationId: salvarMemoriaAluno
+      summary: Salvar progresso ou preferência do aluno
+      description: Armazena info personalizada no agente (ex: estilo de prova, dificuldades, temas preferidos)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                chave: { type: string }
+                valor: { type: string }
+              required: [chave, valor]
+      responses:
+        '200':
+          description: Memória registrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string }
+
+  /observer:
+    post:
+      operationId: registrarObservacao
+      summary: Registrar log de comportamento interno
+      description: Aciona observador do agente com dados de rastreio (atividade, falha, refinamento).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                evento: { type: string }
+                detalhes: { type: string }
+              required: [evento]
+      responses:
+        '200':
+          description: Observação registrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  observacao_id: { type: string }
